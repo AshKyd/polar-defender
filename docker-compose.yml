@@ -1,16 +1,18 @@
 services:
-    polar-defense:
+    polar-defender:
         build: .
-        container_name: polar-defense
+        container_name: polar-defender
         restart: unless-stopped
         networks:
             - web
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.polar-defense.rule=Host(`polar-defender.kyd.au`)"
-            - "traefik.http.routers.polar-defense.entrypoints=websecure"
-            - "traefik.http.routers.polar-defense.tls.certresolver=myresolver"
-            - "traefik.http.services.polar-defense.loadbalancer.server.port=80"
+            - "traefik.http.routers.polar-defender.rule=Host(`polar-defender.kyd.au`)"
+            - "traefik.http.routers.polar-defender.entrypoints=websecure"
+            - "traefik.http.routers.polar-defender.tls.certresolver=le"
+            - "traefik.http.routers.polar-defender.middlewares=polar-compress"
+            - "traefik.http.middlewares.polar-compress.compress=true"
+            - "traefik.http.services.polar-defender.loadbalancer.server.port=80"
 
 networks:
     web:

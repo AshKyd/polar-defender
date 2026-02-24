@@ -1,19 +1,26 @@
-var fs = require('fs');
+import { readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
 
-var keys = [];
+const keys = [];
+const campaign = {
+    messages: JSON.parse(
+        await readFile(resolve(import.meta.dirname, "./messages.json"), "utf8"),
+    ),
+    levels: [],
+};
 
-var campaign = {
-    messages: require('./messages'),
-    levels: []
-}
+async function getKeys(levelNum) {
+    const json = JSON.parse(
+        await readFile(
+            resolve(import.meta.dirname, `./level${levelNum}.json`),
+            "utf8",
+        ),
+    );
 
-function getKeys(level){
-    var json = require('./level'+level+'.json');
-
-    json.waves.forEach(function(wave){
-        wave.sprites.forEach(function(sprite){
-            for(key in sprite){
-                if(keys.indexOf(key) == -1){
+    json.waves.forEach(function (wave) {
+        wave.sprites.forEach(function (sprite) {
+            for (const key in sprite) {
+                if (keys.indexOf(key) == -1) {
                     keys.push(key);
                 }
             }
@@ -21,28 +28,37 @@ function getKeys(level){
     });
 }
 
-function encode(level){
-    var json = require('./level'+level+'.json');
+async function encode(levelNum) {
+    const json = JSON.parse(
+        await readFile(
+            resolve(import.meta.dirname, `./level${levelNum}.json`),
+            "utf8",
+        ),
+    );
 
-    json.waves.forEach(function(wave){
-        wave.sprites = wave.sprites.map(function(sprite){
-            return keys.map(function(key){
-                return sprite[key] || '';
-            }).join(',');
+    json.waves.forEach(function (wave) {
+        wave.sprites = wave.sprites.map(function (sprite) {
+            return keys
+                .map(function (key) {
+                    return sprite[key] || "";
+                })
+                .join(",");
         });
     });
     return json;
 }
 
-
-for(var i=1;i<=6;i++){
-    getKeys(i);
+for (let i = 1; i <= 6; i++) {
+    await getKeys(i);
 }
 
-for(var i=1;i<=6;i++){
-    campaign.levels.push(encode(i));
+for (let i = 1; i <= 6; i++) {
+    campaign.levels.push(await encode(i));
 }
 
 campaign.keys = keys;
 
-fs.writeFileSync('levels-compiled.json',JSON.stringify(campaign,null,2));
+await writeFile(
+    resolve(import.meta.dirname, "levels-compiled.json"),
+    JSON.stringify(campaign, null, 2),
+);

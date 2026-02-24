@@ -1,28 +1,45 @@
-var fs = require('fs');
-var files = fs.readdirSync('.');
-var pkg = {};
-files.forEach(function(file){
-	if(!file.match(/\.svg$/)){
-		return;
-	}
-	var fileContents = fs.readFileSync(file,'utf8');
+import { readdir, readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
 
-	// These are kinda useless so let's get rid of 'em.
-	['stroke-linecap','stroke-linejoin','xmlns:dc','version','xmlns:cc','xmlns:rdf'].forEach(function(attr){
-		fileContents = fileContents.replace(new RegExp(' '+attr+'="[^"]+"','g'),'');
-	});
+const dir = import.meta.dirname;
+const files = await readdir(dir);
+const pkg = {};
 
-	// Replace some colors I've been having trouble with.
-	fileContents = fileContents.replace(/#F00/,'#f00');
-	fileContents = fileContents.replace(/#800000/,'#800');
-	fileContents = fileContents.replace(/<metadata>.*<\/metadata>/,'');
+for (const file of files) {
+    if (!file.match(/\.svg$/)) {
+        continue;
+    }
+    let fileContents = await readFile(resolve(dir, file), "utf8");
 
-	// Strop out floaters.
-	fileContents = fileContents.replace(/(\d+\.\d+)/g,function(a){return Math.round(a);});
+    // These are kinda useless so let's get rid of 'em.
+    [
+        "stroke-linecap",
+        "stroke-linejoin",
+        "xmlns:dc",
+        "version",
+        "xmlns:cc",
+        "xmlns:rdf",
+    ].forEach(function (attr) {
+        fileContents = fileContents.replace(
+            new RegExp(" " + attr + '="[^"]+"', "g"),
+            "",
+        );
+    });
 
-	pkg[file.replace('.svg','')] = fileContents//.match(/^<svg[^>]>$/);
-});
+    // Replace some colors I've been having trouble with.
+    fileContents = fileContents.replace(/#F00/, "#f00");
+    fileContents = fileContents.replace(/#800000/, "#800");
+    fileContents = fileContents.replace(/<metadata>.*<\/metadata>/, "");
 
-fs.writeFileSync('index.js','module.exports = '+JSON.stringify(pkg));
+    // Strip out floaters.
+    fileContents = fileContents.replace(/(\d+\.\d+)/g, function (a) {
+        return Math.round(Number(a));
+    });
 
-//3.21
+    pkg[file.replace(".svg", "")] = fileContents;
+}
+
+await writeFile(
+    resolve(dir, "index.js"),
+    "export default " + JSON.stringify(pkg),
+);

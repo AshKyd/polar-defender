@@ -1,13 +1,13 @@
-var campaign = require('./levels-compiled');
+import campaign from "./levels-compiled.json";
 
 // Extract our levels.
-campaign.levels.forEach(function(level){
-    level.waves.forEach(function(wave){
-        wave.sprites = wave.sprites.map(function(sprites){
-            sprites = sprites.split(',');
+campaign.levels.forEach(function (level) {
+    level.waves.forEach(function (wave) {
+        wave.sprites = wave.sprites.map(function (sprites) {
+            sprites = sprites.split(",");
             var val = {};
-            sprites.forEach(function(prop,i){
-                if(prop){
+            sprites.forEach(function (prop, i) {
+                if (prop) {
                     val[campaign.keys[i]] = prop;
                 }
             });
@@ -16,4 +16,4 @@ campaign.levels.forEach(function(level){
     });
 });
 
-module.exports = campaign;
+export default campaign;

@@ -1,31 +1,28 @@
 {
-  "name": "polar-defense",
-  "version": "1.0.0",
-  "description": "A 2d fixed shooter on a miniature planet.",
-  "main": "src/scripts/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:AshKyd/polar-defense.git"
-  },
-  "scripts": {
-    "clean": "rm dist -rf; mkdir dist",
-    "css": "cp src/css/* dist/",
-    "img": "cd src/img;node encode.js",
-    "campaign": "cd src/campaign;node jsonpact.js",
-    "browserify": "browserify src/scripts/index.js | uglifyjs > dist/index.js",
-    "resources": "cp src/index.html src/img dist/ -r",
-    "build": "npm run clean;npm run img & npm run campaign;wait;npm run css & npm run browserify & npm run resources; wait;"
-  },
-  "author": "Ash Kyd <ash@kyd.com.au>",
-  "license": "BSD",
-  "bugs": {
-    "url": "https://github.com/AshKyd/polar-defense/issues"
-  },
-  "devDependencies": {
-    "browserify": "^13.1.1",
-    "uglifyjs": "^2.4.10"
-  },
-  "dependencies": {
-    "gulp-minify-css": "~0.3.7"
-  }
+    "name": "polar-defense",
+    "version": "1.0.0",
+    "description": "A 2d fixed shooter on a miniature planet.",
+    "main": "src/scripts/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:AshKyd/polar-defense.git"
+    },
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "clean": "rm dist -rf",
+        "img": "cd src/img;node encode.js",
+        "campaign": "cd src/campaign;node jsonpact.js"
+    },
+    "author": "Ash Kyd <ash@kyd.com.au>",
+    "license": "BSD",
+    "bugs": {
+        "url": "https://github.com/AshKyd/polar-defense/issues"
+    },
+    "devDependencies": {
+        "vite": "^7.3.1"
+    },
+    "dependencies": {}
 }

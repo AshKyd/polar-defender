@@ -1,5 +1,5 @@
 {
-    "name": "polar-defense",
+    "name": "polar-defender",
     "version": "1.0.0",
     "description": "A 2d fixed shooter on a miniature planet.",
     "main": "src/scripts/index.js",
@@ -10,7 +10,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
+        "build": "npm run img && npm run campaign && vite build",
         "preview": "vite preview",
         "clean": "rm dist -rf",
         "img": "cd src/img;node encode.js",

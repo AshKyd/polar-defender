@@ -4,9 +4,19 @@
         <meta charset="utf-8" />
         <title>Polar Defender</title>
         <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+            name="description"
+            content="A radial space shooter where you defend the planet from alien invaders using polar coordinates. Messy, fast-paced, and fun!"
         />
+        <meta property="og:title" content="Polar Defender" />
+        <meta
+            property="og:description"
+            content="Defend the planet from waves of alien invaders in this unique radial space shooter."
+        />
+        <meta property="og:url" content="https://polar-defender.kyd.au" />
+        <meta property="og:image" content="/og-image.webp" />
+        <meta property="og:type" content="website" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <style type="text/css">
             @import url(/css/style.css);
         </style>
@@ -14,5 +24,17 @@
     </head>
     <body>
         <canvas id="c"></canvas>
+        <div id="ui-layer" class="main visible">
+            <h1>Polar Defender</h1>
+            <p>
+                A radial space shooter where you defend the planet from alien
+                invaders. Use your polar coordinate skills to blast them out of
+                the sky!
+            </p>
+            <div class="credits">
+                Polar defender is brought to you by
+                <a href="https://ashk.au">Ash Kyd</a>.
+            </div>
+        </div>
     </body>
 </html>

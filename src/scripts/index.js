@@ -37,15 +37,18 @@ var doc = document;
 var campaign;
 var message;
 function showMessage(opts, cb) {
-    if (message) {
+    if (message && message.parentNode === doc.body) {
         doc.body.removeChild(message);
     }
-    message = document.createElement("div");
+    message = doc.getElementById("ui-layer") || doc.createElement("div");
+    message.id = "ui-layer";
     message.innerHTML = "<h1>" + opts.heading + "</h1>" + opts.message;
     if (opts.dom) {
         message.appendChild(opts.dom);
     }
-    doc.body.appendChild(message);
+    if (!message.parentNode) {
+        doc.body.appendChild(message);
+    }
     t(function () {
         message.className = "visible " + (opts.className || "");
     });
@@ -166,7 +169,6 @@ function mainMenu() {
         "☢;New Campaign": levelChooser,
         "☣;Infinite Mode": zenMode,
         "♪;Toggle Sound": toggleSound,
-        "ℹ;About": about,
     };
     var div = doc.createElement("p");
     for (var i in options) {
@@ -178,9 +180,16 @@ function mainMenu() {
         a.appendChild(icon);
         div.appendChild(a);
     }
+
+    var credits = doc.createElement("div");
+    credits.className = "credits";
+    credits.innerHTML = campaign.messages.about.message;
+    div.appendChild(credits);
+
     showMessage({
         heading: "Polar Defender",
-        message: "",
+        message:
+            "<p>A radial space shooter where you defend the planet from alien invaders. Use your polar coordinate skills to blast them out of the sky!</p>",
         dom: div,
         className: "main",
     });

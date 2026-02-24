@@ -1,0 +1,16 @@
+{
+    "name": "Polar Defender",
+    "short_name": "Polar Defender",
+    "description": "Defend the planet from waves of alien invaders in this radial space shooter.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "icons": [
+        {
+            "src": "/favicon.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        }
+    ]
+}

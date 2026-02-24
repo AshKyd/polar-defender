@@ -36,6 +36,20 @@ var doc = document;
 
 var campaign;
 var message;
+var deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    // If we're on the main menu, refresh it to show the install button.
+    if (
+        message &&
+        message.className.indexOf("main") !== -1 &&
+        message.className.indexOf("levels") === -1
+    ) {
+        mainMenu();
+    }
+});
 function showMessage(opts, cb) {
     if (message && message.parentNode === doc.body) {
         doc.body.removeChild(message);
@@ -170,6 +184,17 @@ function mainMenu() {
         "☣;Infinite Mode": zenMode,
         "♪;Toggle Sound": toggleSound,
     };
+    if (deferredPrompt) {
+        options["💾;Install to Desktop"] = function () {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(function (choiceResult) {
+                if (choiceResult.outcome === "accepted") {
+                    deferredPrompt = null;
+                    mainMenu();
+                }
+            });
+        };
+    }
     var div = doc.createElement("p");
     for (var i in options) {
         var text = i.split(";");
@@ -277,4 +302,8 @@ window.onload = function () {
         campaign = campaignData;
         mainMenu();
     });
+
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+    }
 };
